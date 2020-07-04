@@ -1,5 +1,6 @@
 package com.wallet.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -10,8 +11,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Response<T> {
+	
+	private T data;
+	
+	private List<String> errors;
 
-    private T data;
-
-    private List<String> errors;
+	public List<String> getErrors() {
+		if (errors == null) {
+			errors = new ArrayList<>(5);
+		}
+		return errors;
+	}
 }

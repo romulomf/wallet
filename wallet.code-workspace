@@ -5,6 +5,15 @@
 		}
 	],
 	"settings": {
-		"java.configuration.updateBuildConfiguration": "automatic"
+		"java.configuration.updateBuildConfiguration": "automatic",
+        "files.exclude": {
+            "**/.DS_Store": false,
+            "**/.git": false,
+            "**/.hg": false,
+            "**/.svn": false,
+            "**/CVS": false
+		},
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false
 	}
 }
