@@ -52,12 +52,12 @@ class UserControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isCreated())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value(ID))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.data.name").value(NAME))
-			.andExpect(MockMvcResultMatchers.jsonPath("$.data.password").value(PASSWORD))
+			.andExpect(MockMvcResultMatchers.jsonPath("$.data.password").doesNotExist())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.data.email").value(EMAIL));
 	}
 
 	@Test
-	public void testSaveInvalidUser() throws Exception {
+	void testSaveInvalidUser() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post(URL).content(getJsonPayload(ID, NAME, PASSWORD, "email"))
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON))
