@@ -11,9 +11,13 @@
             "**/.git": false,
             "**/.hg": false,
             "**/.svn": false,
-            "**/CVS": false
+			"**/CVS": false,
+			"**/.apt_generated": true,
+			"**/.apt_generated_tests": true
 		},
 		"editor.insertSpaces": false,
-		"editor.detectIndentation": false
+		"editor.detectIndentation": false,
+		"editor.tabSize": 4,
+		"editor.tabCompletion": "on"
 	}
 }
