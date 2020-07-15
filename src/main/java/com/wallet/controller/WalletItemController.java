@@ -18,11 +18,14 @@ import com.wallet.service.WalletItemService;
 import com.wallet.util.Util;
 import com.wallet.util.enums.TypeEnum;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,11 +42,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("wallet-item")
 public class WalletItemController {
 
+	private Logger logger = LoggerFactory.getLogger(WalletItemController.class);
+
 	@Autowired
 	private WalletItemService service;
 
 	@Autowired
 	private UserWalletService userWalletService;
+
 
 	@PostMapping
 	public ResponseEntity<Response<WalletItemDTO>> create(@Valid @RequestBody WalletItemDTO dto, BindingResult result) {
@@ -81,6 +87,8 @@ public class WalletItemController {
 
 	@GetMapping(value = "/type/{wallet}")
 	public ResponseEntity<Response<List<WalletItemDTO>>> findByWalletIdAndType(@PathVariable("wallet") Long wallet, @RequestParam("type") String type) {
+		logger.info("Buscando por carteira {} e tipo {}", wallet, type);
+
 		Response<List<WalletItemDTO>> response = new Response<>();
 		List<WalletItem> list = service.findByWalletIdAndType(wallet, TypeEnum.getEnum(type));
 
@@ -125,6 +133,7 @@ public class WalletItemController {
 	}
 
 	@DeleteMapping(value = "/{walletItemId}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Response<String>> delete(@PathVariable("walletItemId") Long walletItemId) {
 		Response<String> response = new Response<>();
 		Optional<WalletItem> walletItem = service.findById(walletItemId);

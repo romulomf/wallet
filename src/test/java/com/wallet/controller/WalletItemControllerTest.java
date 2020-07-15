@@ -199,7 +199,7 @@ class WalletItemControllerTest {
 
 	@Test
 	@Order(8)
-	@WithMockUser
+	@WithMockUser(username = "admin@admin.com", roles = {"ADMIN"})
 	void testDelete() throws Exception {
 		BDDMockito.given(service.findById(Mockito.anyLong())).willReturn(Optional.of(new WalletItem()));
 
@@ -210,7 +210,7 @@ class WalletItemControllerTest {
 
 	@Test
 	@Order(9)
-	@WithMockUser
+	@WithMockUser(username = "admin@admin.com", roles = {"ADMIN"})
 	void testDeleteInvalidId() throws Exception {
 		BDDMockito.given(service.findById(Mockito.anyLong())).willReturn(Optional.empty());
 

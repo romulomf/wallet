@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wallet.dto.UserDTO;
 import com.wallet.entity.User;
 import com.wallet.service.UserService;
+import com.wallet.util.enums.RoleEnum;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -53,6 +54,7 @@ class UserControllerTest {
 			.andExpect(MockMvcResultMatchers.jsonPath("$.data.id").value(ID))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.data.name").value(NAME))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.data.password").doesNotExist())
+			.andExpect(MockMvcResultMatchers.jsonPath("$.data.role").value(RoleEnum.ROLE_ADMIN.toString()))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.data.email").value(EMAIL));
 	}
 
@@ -71,6 +73,7 @@ class UserControllerTest {
 		u.setName(NAME);
 		u.setPassword(PASSWORD);
 		u.setEmail(EMAIL);
+		u.setRole(RoleEnum.ROLE_ADMIN);
 		return u;
 	}
 
@@ -80,6 +83,7 @@ class UserControllerTest {
 		dto.setName(name);
 		dto.setPassword(password);
 		dto.setEmail(email);
+		dto.setRole(RoleEnum.ROLE_ADMIN.toString());
 
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(dto);

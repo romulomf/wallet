@@ -12,6 +12,8 @@ import com.wallet.util.enums.TypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class WalletItemServiceImpl implements WalletItemService {
 	private int itemsPerPage;
 
 	@Override
+	@CacheEvict(value = "findByWalletAndType", allEntries = true)
 	public WalletItem save(WalletItem walletItem) {
 		return repository.save(walletItem);
 	}
@@ -37,6 +40,7 @@ public class WalletItemServiceImpl implements WalletItemService {
 	}
 
 	@Override
+	@Cacheable(value = "findByWalletIdAndType")
 	public List<WalletItem> findByWalletIdAndType(Long wallet, TypeEnum type) {
 		return repository.findByWalletIdAndType(wallet, type);
 	}
@@ -52,6 +56,7 @@ public class WalletItemServiceImpl implements WalletItemService {
 	}
 
 	@Override
+	@CacheEvict(value = "findByWalletAndType", allEntries = true)
 	public void deleteById(Long id) {
 		repository.deleteById(id);
 	}
