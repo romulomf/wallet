@@ -1,8 +1,5 @@
 package com.wallet.security.config;
 
-import com.wallet.security.JwtAuthenticationEntryPoint;
-import com.wallet.security.JwtAuthenticationTokenFilter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.wallet.security.JwtAuthenticationEntryPoint;
+import com.wallet.security.JwtAuthenticationTokenFilter;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -32,7 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		PasswordEncoder encoder = passwordEncoder();
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(encoder);
 	}
 	
 	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
@@ -50,15 +51,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-			.antMatchers("/auth/**", "/configuration/security", "/webjars/**", "/user/**", "/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html")
+			.antMatchers("/auth/**", "/configuration/security", "/user/**")
 			.permitAll().anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 		http.headers().cacheControl();
 	}
 	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
+	private PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 }

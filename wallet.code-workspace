@@ -7,13 +7,17 @@
 	"settings": {
 		"java.configuration.updateBuildConfiguration": "automatic",
         "files.exclude": {
-            "**/.DS_Store": false,
-            "**/.git": false,
-            "**/.hg": false,
-            "**/.svn": false,
+			"**/.DS_Store": false,
+			"**/.git": false,
+			"**/.hg": false,
+			"**/.svn": false,
 			"**/CVS": false,
 			"**/.apt_generated": true,
-			"**/.apt_generated_tests": true
+			"**/.apt_generated_tests": true,
+			"**/.classpath": true,
+			"**/.project": true,
+			"**/.settings": true,
+			"**/.factorypath": true
 		},
 		"editor.insertSpaces": false,
 		"editor.detectIndentation": false,
