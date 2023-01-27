@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.wallet.entity.User;
 import com.wallet.service.UserService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ public class Util {
 
 	private static UserService staticService;
 
-	public Util(UserService service) {
+	public Util(@Autowired UserService service) {
 		Util.staticService = service;
 	}
 

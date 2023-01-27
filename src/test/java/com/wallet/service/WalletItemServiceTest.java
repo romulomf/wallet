@@ -1,14 +1,11 @@
 package com.wallet.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.wallet.entity.Wallet;
-import com.wallet.entity.WalletItem;
-import com.wallet.repository.WalletItemRepository;
-import com.wallet.util.enums.TypeEnum;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,12 +21,17 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.wallet.entity.Wallet;
+import com.wallet.entity.WalletItem;
+import com.wallet.repository.WalletItemRepository;
+import com.wallet.util.enums.TypeEnum;
+
 @SpringBootTest
 @TestInstance(Lifecycle.PER_METHOD)
 @ActiveProfiles("test")
 class WalletItemServiceTest {
 
-	private static final Date DATE = new Date();
+	private static final Date DATE = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
 
 	private static final TypeEnum TYPE = TypeEnum.EN;
 
@@ -59,7 +61,7 @@ class WalletItemServiceTest {
 		list.add(getMockWalletItem());
 		Page<WalletItem> page = new PageImpl<>(list);
 		BDDMockito.given(repository.findAllByWalletIdAndDateGreaterThanEqualAndDateLessThanEqual(Mockito.anyLong(), Mockito.any(Date.class), Mockito.any(Date.class), Mockito.any(PageRequest.class))).willReturn(page);
-		Page<WalletItem> response = service.findBetweenDates(1L, new Date(), new Date(), 0);
+		Page<WalletItem> response = service.findBetweenDates(1L, DATE, DATE, 0);
 
 		Assertions.assertNotNull(response);
 		Assertions.assertEquals(1, response.getContent().size());

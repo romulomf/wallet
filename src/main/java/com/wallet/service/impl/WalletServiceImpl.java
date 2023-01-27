@@ -10,11 +10,11 @@ import com.wallet.service.WalletService;
 @Service
 public class WalletServiceImpl implements WalletService {
 
-    @Autowired
-    private WalletRepository repository;
+	@Autowired
+	private WalletRepository repository;
 
-    @Override
-    public Wallet save(Wallet wallet) {
+	@Override
+	public Wallet save(Wallet wallet) {
 		return repository.save(wallet);
-    }
+	}
 }

@@ -2,11 +2,10 @@ package com.wallet.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class BCrypt {
+import lombok.NoArgsConstructor;
 
-	private BCrypt() {
-		// construtor padrão
-	}
+@NoArgsConstructor
+public class BCrypt {
 
 	public static String getHash(String password) {
 		if (password == null) {

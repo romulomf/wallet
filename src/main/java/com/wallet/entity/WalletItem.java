@@ -37,7 +37,7 @@ public class WalletItem implements Serializable {
 	@Column(name = "ID")
 	private Long id;
 
-	@JoinColumn(name = "WALLET", referencedColumnName = "ID")
+	@JoinColumn(name = "WALLET_ID", referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Wallet wallet;
 

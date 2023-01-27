@@ -1,0 +1,24 @@
+version: '3.9'
+networks:
+  wallet-network:
+    name: wallet-network
+    driver: bridge
+services:
+  database:
+    image: postgres:latest
+    container_name: wallet-database
+    hostname: wallet-database
+    networks:
+      wallet-network:
+    ports:
+      - 5432:5432
+  appserver:
+    image: tomcat:10-jdk11
+    container_name: wallet-application
+    hostname: wallet-application
+    command: ["catalina.sh", "jpda", "run"]
+    networks:
+      wallet-network:
+    ports:
+      - 8000:8000
+      - 8080:8080

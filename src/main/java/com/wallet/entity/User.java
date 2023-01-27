@@ -14,10 +14,12 @@ import javax.persistence.Table;
 import com.wallet.util.enums.RoleEnum;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "USERS")
 @Data
+@NoArgsConstructor
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1693850165739564098L;

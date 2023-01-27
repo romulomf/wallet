@@ -1,0 +1,105 @@
+spring:
+  profiles:
+    default: dev
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - dev
+  datasource:
+    driver-class-name: org.h2.Driver
+#    url: "jdbc:postgresql://localhost:5432/wallet?user=postgres&password=postgres"
+    url: "jdbc:h2:file:~/wallet;NON_KEYWORDS=PASSWORD,USER,VALUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE"
+    username: sa
+    password: sa
+  sql:
+    init:
+      mode: embedded
+      continue-on-error: false
+      encoding: UTF-8
+  h2:
+    console:
+      enabled: true
+      # é fundamental que na configuração do spring sejam liberadas as urls correspondentes ao
+      # cliente web que permite acessar o console do h2. se isto não for feito, a url não será
+      # acessível e nenhum erro é apresentado, deixando o desenvolvedor confuso sem saber por que
+      # configuração que foi feita não está funcionando.
+      path: /h2
+      settings:
+        trace: true
+        web-allow-others: true
+  devtools:
+    add-properties: true
+    remote:
+      secret: mysecret
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        '[format_sql]': true
+        '[show_sql]': true
+        '[us_sql_comments]': true
+        type: trace
+jwt:
+  expiration: 600
+  secret: "_(120@#$3t09138uioajsdU2B1Rjs32"
+pagination:
+  itemsPerPage: 10
+logging:
+  level:
+    web: debug
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - prod
+  datasource:
+    url: "$DATABASE_URL"
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        '[format_sql]': false
+        '[show_sql]': false
+        '[us_sql_comments]': false
+        type: info
+jwt:
+  expiration: 6000
+  secret: "172asjdksahd#$@@!askdhahuii123897"
+pagination:
+  itemsPerPage: 10
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - test
+  datasource:
+    driver-class-name: org.h2.Driver
+    # é preciso dizer ao h2 que algumas das palavras chaves não podem ser
+    # tratadas como reservadas, pois elas são usadas como nomes de colunas
+    # em algumas tabelas da aplicação
+    url: "jdbc:h2:mem:wallet;DB_CLOSE_DELAY=-1;NON_KEYWORDS=PASSWORD,USER,VALUE"
+    username: sa
+    password: sa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: h2
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /h2
+jwt:
+  expiration: 600
+  secret: "_(120@#$3t09138uioajsdU2B1Rjs32"
+pagination:
+  itemsPerPage: 10

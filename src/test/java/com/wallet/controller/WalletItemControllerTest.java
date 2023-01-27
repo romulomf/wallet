@@ -2,23 +2,13 @@ package com.wallet.controller;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wallet.dto.WalletItemDTO;
-import com.wallet.entity.User;
-import com.wallet.entity.UserWallet;
-import com.wallet.entity.Wallet;
-import com.wallet.entity.WalletItem;
-import com.wallet.service.UserService;
-import com.wallet.service.UserWalletService;
-import com.wallet.service.WalletItemService;
-import com.wallet.util.enums.TypeEnum;
 
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -39,6 +29,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wallet.dto.WalletItemDTO;
+import com.wallet.entity.User;
+import com.wallet.entity.UserWallet;
+import com.wallet.entity.Wallet;
+import com.wallet.entity.WalletItem;
+import com.wallet.service.UserService;
+import com.wallet.service.UserWalletService;
+import com.wallet.service.WalletItemService;
+import com.wallet.util.enums.TypeEnum;
+
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
@@ -47,7 +49,7 @@ class WalletItemControllerTest {
 
 	private static final Long ID = 1L;
 
-	private static final Date DATE = new Date();
+	private static final Date DATE = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
 
 	private static final LocalDate TODAY = LocalDate.now();
 

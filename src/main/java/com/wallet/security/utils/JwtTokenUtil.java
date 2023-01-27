@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +19,14 @@ public class JwtTokenUtil {
 	static final String CLAIM_KEY_AUDIENCE = "audience";
 	static final String CLAIM_KEY_CREATED = "created";
 
-	@Value("${jwt.secret}")
-	private String secret;
+	private final String secret;
 
-	@Value("${jwt.expiration}")
-	private Long expiration;
+	private final Long expiration;
+
+	public JwtTokenUtil() {
+		this.secret = "_(120@#$3t09138uioajsdU2B1Rjs32";
+		this.expiration = Long.valueOf(600l);
+	}
 
 	public String getUsernameFromToken(String token) {
 		String username;

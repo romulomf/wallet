@@ -5,18 +5,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.wallet.entity.WalletItem;
-import com.wallet.repository.WalletItemRepository;
-import com.wallet.service.WalletItemService;
-import com.wallet.util.enums.TypeEnum;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import com.wallet.entity.WalletItem;
+import com.wallet.repository.WalletItemRepository;
+import com.wallet.service.WalletItemService;
+import com.wallet.util.enums.TypeEnum;
 
 @Service
 public class WalletItemServiceImpl implements WalletItemService {
@@ -24,8 +23,12 @@ public class WalletItemServiceImpl implements WalletItemService {
 	@Autowired
 	private WalletItemRepository repository;
 
-	@Value("${pagination.items_per_page}")
+//	@Value("${pagination.items_per_page}")
 	private int itemsPerPage;
+
+	public WalletItemServiceImpl() {
+		itemsPerPage = 10;
+	}
 
 	@Override
 	@CacheEvict(value = "findByWalletAndType", allEntries = true)
