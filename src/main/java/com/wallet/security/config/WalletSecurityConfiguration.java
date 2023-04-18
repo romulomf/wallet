@@ -42,23 +42,22 @@ public class WalletSecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http, @Autowired JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter,  @Autowired JwtAuthenticationEntryPoint unauthorizedHandler) throws Exception {
-		http
-			.csrf().disable()
-			.authorizeHttpRequests().antMatchers("/resources/**", "/static/**", "/auth/**", "/user/**", "/h2/**").permitAll().anyRequest().authenticated()
-		.and()
-			.headers()
-				.frameOptions().sameOrigin()
-				.cacheControl().disable()
-		.and()
-			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-		.and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and()
-			.requestCache().disable()
-			.securityContext().disable()
-			.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-		
-		return http.build();
+		return http
+			.csrf(conf -> conf.disable())
+			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+				authorizationManagerRequestMatcherRegistry.antMatchers("/resources/**", "/static/**", "/auth/**", "/user/**", "/h2/**")
+					.permitAll().anyRequest().authenticated())
+			.headers(headersConfigurer ->
+				headersConfigurer.frameOptions(frameOptionsConfig ->
+					frameOptionsConfig.sameOrigin().cacheControl(cacheControlConfig -> cacheControlConfig.disable())
+				)
+			)
+			.exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(unauthorizedHandler))
+			.sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.requestCache(requestCacheConfigurer -> requestCacheConfigurer.disable())
+			.securityContext(securityContextConfigurer ->
+				securityContextConfigurer.disable().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class))
+			.build();
 	}
 
 	@Bean
