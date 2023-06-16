@@ -120,8 +120,10 @@ class WalletItemRepositoryTest {
 		final Date currentDatePlusFiveDays = Date.from(LocalDateTime.now().plusDays(5).atZone(ZoneId.systemDefault()).toInstant());
 		final Date currentDatePlusSevenDays = Date.from(LocalDateTime.now().plusDays(7).atZone(ZoneId.systemDefault()).toInstant());
 
-		repository.save(new WalletItem(null, this.wallet, currentDatePlusFiveDays, TYPE, DESCRIPTION, VALUE));
-		repository.save(new WalletItem(null, this.wallet, currentDatePlusSevenDays, TYPE, DESCRIPTION, VALUE));
+		WalletItem item1 = new WalletItem(null, this.wallet, currentDatePlusFiveDays, TYPE, DESCRIPTION, VALUE);
+		repository.saveAndFlush(item1);
+		WalletItem item2 = new WalletItem(null, this.wallet, currentDatePlusSevenDays, TYPE, DESCRIPTION, VALUE);
+		repository.saveAndFlush(item2);
 
 		PageRequest pageRequest = PageRequest.of(0, 10);
 		Page<WalletItem> page = repository.findAllByWalletIdAndDateGreaterThanEqualAndDateLessThanEqual(this.wallet.getId(), DATE_TIME, currentDatePlusFiveDays, pageRequest);

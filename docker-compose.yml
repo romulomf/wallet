@@ -9,16 +9,26 @@ services:
     container_name: wallet-database
     hostname: wallet-database
     networks:
-      wallet-network:
+      - wallet-network
     ports:
-      - 5432:5432
+    - 5432:5432
   appserver:
-    image: tomcat:10-jdk11
+    image: tomcat:9-jdk11
     container_name: wallet-application
     hostname: wallet-application
-    command: ["catalina.sh", "jpda", "run"]
+    command:
+    - catalina.sh
+    - jpda
+    - run
+    depends_on:
+    - database
+    environment:
+      - JPDA_ADDRESS=8000
+      - JPDA_TRANSPORT=dt_socket
     networks:
-      wallet-network:
+    - wallet-network
     ports:
-      - 8000:8000
-      - 8080:8080
+    - 8000:8000
+    - 8080:8080
+    volumes:
+    - ./deploys:/usr/local/tomcat/webapps:rw
