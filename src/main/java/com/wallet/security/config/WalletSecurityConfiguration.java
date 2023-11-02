@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.CacheControlConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,7 +29,7 @@ import lombok.NoArgsConstructor;
 public class WalletSecurityConfiguration {
 
 	@Bean
-	public AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder, UserDetailsService userDetailsService) throws Exception {
+	AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder, UserDetailsService userDetailsService) throws Exception {
 		return http.getSharedObject(AuthenticationManagerBuilder.class)
 					.userDetailsService(userDetailsService)
 					.passwordEncoder(passwordEncoder)
@@ -36,12 +38,12 @@ public class WalletSecurityConfiguration {
 	}
 
 	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+	BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, @Autowired JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter,  @Autowired JwtAuthenticationEntryPoint unauthorizedHandler) throws Exception {
+	SecurityFilterChain filterChain(HttpSecurity http, @Autowired JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, @Autowired JwtAuthenticationEntryPoint unauthorizedHandler) throws Exception {
 		return http
 			.csrf(conf -> conf.disable())
 			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
@@ -49,19 +51,19 @@ public class WalletSecurityConfiguration {
 					.permitAll().anyRequest().authenticated())
 			.headers(headersConfigurer ->
 				headersConfigurer.frameOptions(frameOptionsConfig ->
-					frameOptionsConfig.sameOrigin().cacheControl(cacheControlConfig -> cacheControlConfig.disable())
+					frameOptionsConfig.sameOrigin().cacheControl(CacheControlConfig::disable)
 				)
 			)
 			.exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(unauthorizedHandler))
 			.sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.requestCache(requestCacheConfigurer -> requestCacheConfigurer.disable())
+			.requestCache(AbstractHttpConfigurer::disable)
 			.securityContext(securityContextConfigurer ->
 				securityContextConfigurer.disable().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class))
 			.build();
 	}
 
 	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
+	WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.debug(true);
 	}
 }

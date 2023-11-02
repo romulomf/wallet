@@ -4,12 +4,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenUtil {
@@ -19,12 +20,12 @@ public class JwtTokenUtil {
 	static final String CLAIM_KEY_AUDIENCE = "audience";
 	static final String CLAIM_KEY_CREATED = "created";
 
-	private final String secret;
+	private final SecretKey key;
 
 	private final Long expiration;
 
 	public JwtTokenUtil() {
-		this.secret = "_(120@#$3t09138uioajsdU2B1Rjs32";
+		this.key = Jwts.SIG.HS256.key().build();
 		this.expiration = Long.valueOf(600l);
 	}
 
@@ -66,7 +67,7 @@ public class JwtTokenUtil {
 	private Claims getClaimsFromToken(String token) {
 		Claims claims;
 		try {
-			claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+			claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
 		} catch (Exception e) {
 			claims = null;
 		}
@@ -86,6 +87,6 @@ public class JwtTokenUtil {
 	}
 
 	private String generateToken(Map<String, Object> claims) {
-		return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate()).signWith(SignatureAlgorithm.HS512, secret).compact();
+		return Jwts.builder().claims().add(claims).expiration(generateExpirationDate()).and().signWith(key).compact();
 	}
 }

@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import com.wallet.util.enums.TypeEnum;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "WALLET_ITEMS")
 @Data
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class WalletItem implements Serializable {
 
