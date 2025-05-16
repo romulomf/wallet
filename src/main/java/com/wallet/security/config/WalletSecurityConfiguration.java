@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -24,17 +24,15 @@ import lombok.NoArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 @NoArgsConstructor
 public class WalletSecurityConfiguration {
 
 	@Bean
 	AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder, UserDetailsService userDetailsService) throws Exception {
-		return http.getSharedObject(AuthenticationManagerBuilder.class)
-					.userDetailsService(userDetailsService)
-					.passwordEncoder(passwordEncoder)
-				.and()
-					.build();
+		AuthenticationManagerBuilder authManager = http.getSharedObject(AuthenticationManagerBuilder.class);
+		authManager.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+		return authManager.build();
 	}
 
 	@Bean
@@ -46,19 +44,15 @@ public class WalletSecurityConfiguration {
 	SecurityFilterChain filterChain(HttpSecurity http, @Autowired JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter, @Autowired JwtAuthenticationEntryPoint unauthorizedHandler) throws Exception {
 		return http
 			.csrf(conf -> conf.disable())
-			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-				authorizationManagerRequestMatcherRegistry.antMatchers("/resources/**", "/static/**", "/auth/**", "/user/**", "/h2/**")
-					.permitAll().anyRequest().authenticated())
-			.headers(headersConfigurer ->
-				headersConfigurer.frameOptions(frameOptionsConfig ->
-					frameOptionsConfig.sameOrigin().cacheControl(CacheControlConfig::disable)
-				)
+			.authorizeHttpRequests(ahr -> ahr
+				.requestMatchers("/resources/**", "/static/**", "/auth/**", "/user/**", "/h2/**")
+				.permitAll().anyRequest().authenticated()
 			)
-			.exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(unauthorizedHandler))
-			.sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.headers(hc -> hc.frameOptions(foc -> foc.sameOrigin().cacheControl(CacheControlConfig::disable)))
+			.exceptionHandling(ehc -> ehc.authenticationEntryPoint(unauthorizedHandler))
+			.sessionManagement(smc -> smc.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.requestCache(AbstractHttpConfigurer::disable)
-			.securityContext(securityContextConfigurer ->
-				securityContextConfigurer.disable().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class))
+			.securityContext(scc -> scc.disable().addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class))
 			.build();
 	}
 

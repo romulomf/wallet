@@ -2,10 +2,9 @@ package com.wallet.dto;
 
 import java.math.BigDecimal;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.Length;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data

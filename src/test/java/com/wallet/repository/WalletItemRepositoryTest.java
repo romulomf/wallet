@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.ConstraintViolationException;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +23,8 @@ import org.springframework.test.context.ActiveProfiles;
 import com.wallet.entity.Wallet;
 import com.wallet.entity.WalletItem;
 import com.wallet.util.enums.TypeEnum;
+
+import jakarta.validation.ConstraintViolationException;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_METHOD)

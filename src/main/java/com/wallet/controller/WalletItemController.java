@@ -6,11 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -38,17 +35,19 @@ import com.wallet.service.WalletItemService;
 import com.wallet.util.Util;
 import com.wallet.util.enums.TypeEnum;
 
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("wallet-item")
+@RequiredArgsConstructor
 public class WalletItemController {
 
 	private Logger logger = LoggerFactory.getLogger(WalletItemController.class);
 
-	@Autowired
-	private WalletItemService service;
+	private final WalletItemService service;
 
-	@Autowired
-	private UserWalletService userWalletService;
+	private final UserWalletService userWalletService;
 
 
 	@PostMapping

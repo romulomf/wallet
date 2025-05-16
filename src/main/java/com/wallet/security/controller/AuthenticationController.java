@@ -1,7 +1,5 @@
 package com.wallet.security.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +19,8 @@ import com.wallet.response.Response;
 import com.wallet.security.dto.JwtAuthenticationDTO;
 import com.wallet.security.dto.TokenDTO;
 import com.wallet.security.utils.JwtTokenUtil;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("auth")
