@@ -15,11 +15,11 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.wallet.entity.Wallet;
 import com.wallet.entity.WalletItem;
@@ -39,7 +39,7 @@ class WalletItemServiceTest {
 
 	private static final BigDecimal VALUE = BigDecimal.valueOf(65);
 
-	@MockBean
+	@MockitoBean
 	private WalletItemRepository repository;
 
 	@Autowired
@@ -95,7 +95,6 @@ class WalletItemServiceTest {
 	private WalletItem getMockWalletItem() {
 		Wallet wallet = new Wallet();
 		wallet.setId(1L);
-		WalletItem walletItem = new WalletItem(1L, wallet, DATE, TYPE, DESCRIPTION, VALUE);
-		return walletItem;
+		return new WalletItem(1L, wallet, DATE, TYPE, DESCRIPTION, VALUE);
 	}
 }

@@ -11,8 +11,8 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.wallet.entity.User;
 import com.wallet.repository.UserRepository;
@@ -22,7 +22,7 @@ import com.wallet.repository.UserRepository;
 @TestInstance(Lifecycle.PER_CLASS)
 class UserServiceTest {
 
-	@MockBean
+	@MockitoBean
 	private UserRepository repository;
 
 	@Autowired
