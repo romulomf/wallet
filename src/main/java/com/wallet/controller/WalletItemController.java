@@ -65,10 +65,10 @@ public class WalletItemController {
 	}
 
 	@GetMapping(value = "/{wallet}")
-	public ResponseEntity<Response<Page<WalletItemDTO>>> findBetweenDates(@PathVariable("wallet") Long wallet,
-		@RequestParam("startDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
-		@RequestParam("endDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate,
-		@RequestParam(name = "page", defaultValue = "0") int page) {
+	public ResponseEntity<Response<Page<WalletItemDTO>>> findBetweenDates(@PathVariable Long wallet,
+		@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
+		@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate,
+		@RequestParam(defaultValue = "0") int page) {
 			Response<Page<WalletItemDTO>> response = new Response<>();
 
 			Optional<UserWallet> userWallet = userWalletService.findByUsersIdAndWalletId(Util.getAuthenticatedUserId(), wallet);
@@ -85,7 +85,7 @@ public class WalletItemController {
 	}
 
 	@GetMapping(value = "/type/{wallet}")
-	public ResponseEntity<Response<List<WalletItemDTO>>> findByWalletIdAndType(@PathVariable("wallet") Long wallet, @RequestParam("type") String type) {
+	public ResponseEntity<Response<List<WalletItemDTO>>> findByWalletIdAndType(@PathVariable Long wallet, @RequestParam String type) {
 		logger.info("Buscando por carteira {} e tipo {}", wallet, type);
 
 		Response<List<WalletItemDTO>> response = new Response<>();
@@ -98,7 +98,7 @@ public class WalletItemController {
 	}
 
 	@GetMapping(value = "/total/{wallet}")
-	public ResponseEntity<Response<BigDecimal>> sumByWalletId(@PathVariable("wallet") Long wallet) {
+	public ResponseEntity<Response<BigDecimal>> sumByWalletId(@PathVariable Long wallet) {
 		Response<BigDecimal> response = new Response<>();
 		BigDecimal value = service.sumByWalletId(wallet);
 		Optional<BigDecimal> data = Optional.ofNullable(value);
@@ -133,7 +133,7 @@ public class WalletItemController {
 
 	@DeleteMapping(value = "/{walletItemId}")
 	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<Response<String>> delete(@PathVariable("walletItemId") Long walletItemId) {
+	public ResponseEntity<Response<String>> delete(@PathVariable Long walletItemId) {
 		Response<String> response = new Response<>();
 		Optional<WalletItem> walletItem = service.findById(walletItemId);
 		if(!walletItem.isPresent()) {
