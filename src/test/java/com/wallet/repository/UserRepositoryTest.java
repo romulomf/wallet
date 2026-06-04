@@ -30,9 +30,9 @@ class UserRepositoryTest {
 	UserRepository repository;
 
 	@BeforeAll
-	public void setUp() {
+	void setUp() {
 		User u = new User();
-		u.setName("Set Up  User");
+		u.setName("Set Up User");
 		u.setPassword("Senha123");
 		u.setEmail(EMAIL);
 		u.setRole(RoleEnum.ROLE_ADMIN);
@@ -41,7 +41,7 @@ class UserRepositoryTest {
 	}
 
 	@AfterAll
-	public void tearDown() {
+	void tearDown() {
 		repository.deleteAll();
 	}
 

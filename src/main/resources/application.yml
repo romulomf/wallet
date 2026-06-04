@@ -64,6 +64,7 @@ spring:
     open-in-view: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
         '[format_sql]': false
         '[show_sql]': false
         '[us_sql_comments]': false
@@ -88,11 +89,14 @@ spring:
     username: sa
     password: sa
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     database: h2
+    defer-datasource-initialization: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     open-in-view: false
+    properties:
+        hibernate:
+          dialect: org.hibernate.dialect.H2Dialect
   h2:
     console:
       enabled: true

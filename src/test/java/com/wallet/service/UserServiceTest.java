@@ -28,11 +28,8 @@ class UserServiceTest {
 	@Autowired
 	private UserService service;
 
-	public UserServiceTest() {
-	}
-
 	@BeforeAll
-	public void setUp() {
+	void setUp() {
 		BDDMockito.given(repository.findByEmailEquals(Mockito.anyString())).willReturn(Optional.of(new User()));
 	}
 

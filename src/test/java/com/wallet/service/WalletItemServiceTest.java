@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -15,6 +16,8 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -40,10 +43,24 @@ class WalletItemServiceTest {
 	private static final BigDecimal VALUE = BigDecimal.valueOf(65);
 
 	@MockitoBean
+	private CacheManager cacheManager;
+
+	@MockitoBean
 	private WalletItemRepository repository;
 
 	@Autowired
 	private WalletItemService service;
+
+	@BeforeEach
+	void setUp() {
+		final String CACHE_FIND_BY_WALLET_AND_TYPE = "findByWalletAndType";
+		
+		Mockito.when(cacheManager.getCache(CACHE_FIND_BY_WALLET_AND_TYPE)).thenReturn(new ConcurrentMapCache(CACHE_FIND_BY_WALLET_AND_TYPE));
+		
+		final String CACHE_FIND_BY_WALLET_ID_AND_TYPE = "findByWalletIdAndType";
+		
+		Mockito.when(cacheManager.getCache(CACHE_FIND_BY_WALLET_ID_AND_TYPE)).thenReturn(new ConcurrentMapCache(CACHE_FIND_BY_WALLET_ID_AND_TYPE));
+	}
 
 	@Test
 	void testSave() {
