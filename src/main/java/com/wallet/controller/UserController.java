@@ -1,6 +1,5 @@
 package com.wallet.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,15 +16,14 @@ import com.wallet.util.BCrypt;
 import com.wallet.util.enums.RoleEnum;
 
 import jakarta.validation.Valid;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("user")
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
-	
-	@Autowired
-	private UserService service;
+
+	private final UserService service;
 	
 	@PostMapping
 	public ResponseEntity<Response<UserDTO>> create(@Valid @RequestBody UserDTO dto, BindingResult result) {

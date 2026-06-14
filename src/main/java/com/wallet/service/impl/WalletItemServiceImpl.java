@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -20,14 +20,13 @@ import com.wallet.util.enums.TypeEnum;
 @Service
 public class WalletItemServiceImpl implements WalletItemService {
 
-	@Autowired
-	private WalletItemRepository repository;
+	private final WalletItemRepository repository;
 
-//	@Value("${pagination.items_per_page}")
-	private int itemsPerPage;
+	private final int itemsPerPage;
 
-	public WalletItemServiceImpl() {
-		itemsPerPage = 10;
+	public WalletItemServiceImpl(WalletItemRepository repository, @Value("${pagination.itemsPerPage:10}") int itemsPerPage) {
+		this.repository = repository;
+		this.itemsPerPage = itemsPerPage;
 	}
 
 	@Override
